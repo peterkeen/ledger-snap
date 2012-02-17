@@ -1,0 +1,18 @@
+#!/bin/bash
+
+set -e
+set -x
+
+target=$1
+
+if [[ -z $1 ]]; then
+    target=`tarsnap --list-archives | grep git-snap-ledger | sort | tail -n 1`
+fi
+
+mkdir $target
+
+cd $target
+
+tarsnap -x -f $target
+
+git clone ledger.bndl $target

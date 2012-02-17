@@ -1,0 +1,14 @@
+#!/bin/bash
+
+set -e
+set -x
+
+target=`tarsnap --list-archives | grep git-snap-ledger | sort | tail -n 1`
+
+tmpdir=`mktemp -d -t ledger`
+
+cd $tmpdir
+
+tarsnap -x -f $target
+
+git bundle verify ledger.bndl
