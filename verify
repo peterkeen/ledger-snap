@@ -1,14 +1,18 @@
 #!/bin/bash
 
 set -e
-set -x
 
-target=`tarsnap --list-archives | grep git-snap-ledger | sort | tail -n 1`
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+tmpdir=`mktemp -d $TMPDIR/ledger-XXXXXX`
 
-tmpdir=`mktemp -d -t ledger`
+$DIR/jgit clone amazon-s3://.jgit@bugsplat-git-repos/financials.git $tmpdir
 
 cd $tmpdir
 
-tarsnap -x -f $target
+git fsck --strict --full
 
-git bundle verify ledger.bndl
+cd /
+
+rm -rf $tmpdir
+
+echo "Everything looks good!"

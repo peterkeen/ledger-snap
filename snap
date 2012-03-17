@@ -2,20 +2,6 @@
 
 set -e
 
-tmpdir=`mktemp -d -t ledger`
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-echo "-----> Creating bundle"
-git bundle create $tmpdir/ledger.bndl --all
-
-cd $tmpdir
-
-echo "-----> Uploading bundle to tarsnap"
-tarsnap -c -f git-snap-ledger-`date +%Y%m%dT%H%M%S` ledger.bndl
-
-echo "-----> Removing old bundles"
-for a in `tarsnap --list-archives | grep git-snap-ledger- | sort -r | tail -n +3`
-do
-    echo "----->     $a"
-    tarsnap -d -f $a
-done
-
+$DIR/jgit push origin master

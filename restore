@@ -1,18 +1,10 @@
 #!/bin/bash
 
 set -e
-set -x
 
-target=$1
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+tmpdir=`mktemp -d $TMPDIR/ledger-XXXXXX`
 
-if [[ -z $1 ]]; then
-    target=`tarsnap --list-archives | grep git-snap-ledger | sort | tail -n 1`
-fi
+$DIR/jgit clone amazon-s3://.jgit@bugsplat-git-repos/financials.git $tmpdir
 
-mkdir $target
-
-cd $target
-
-tarsnap -x -f $target
-
-git clone ledger.bndl $target
+echo Cloned into $tmpdir. Please inspect it before copying the directory into the appropriate place.
